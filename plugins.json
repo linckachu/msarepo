@@ -1,0 +1,23 @@
+[
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=dizipalw.com&sz=%size%",
+        "fileHash": "sha256-f9019221a221a4c79ec20509eecad4fb9ccfbc4d695f63bc43d50f00f6ad5446",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/linckachu/msarepo",
+        "fileSize": 20101,
+        "status": 1,
+        "language": "tr",
+        "authors": [
+            "linkachu"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 1,
+        "internalName": "MsaRepoProvider",
+        "description": "Dizipal film ve dizi i\u00e7erikleri",
+        "url": "https://raw.githubusercontent.com/linckachu/msarepo/builds/MsaRepoProvider.cs3",
+        "name": "MsaRepoProvider"
+    }
+]
