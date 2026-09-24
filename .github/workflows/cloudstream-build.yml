@@ -38,10 +38,13 @@ jobs:
 
 
 
+      
       - name: Build extension
         run: |
+          sed -i 's/\r$//' gradlew
           chmod +x gradlew
-          ./gradlew MsaRepoProvider:make makePluginsJson
+          ./gradlew MsaRepoProvider:make makePluginsJson --no-daemon
+
 
       - name: Prepare repository files
         run: |
