@@ -1,0 +1,66 @@
+name: CloudStream Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "MsaRepoProvider/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "gradle.properties"
+      - "gradle/**"
+      - "gradlew"
+      - "gradlew.bat"
+      - "repo.json"
+      - ".github/workflows/cloudstream-build.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cloudstream-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build extension
+        run: |
+          chmod +x gradlew
+          ./gradlew MsaRepoProvider:make makePluginsJson
+
+      - name: Prepare repository files
+        run: |
+          mkdir -p "$RUNNER_TEMP/cloudstream-builds"
+          cp repo.json "$RUNNER_TEMP/cloudstream-builds/repo.json"
+          cp build/plugins.json "$RUNNER_TEMP/cloudstream-builds/plugins.json"
+          cp MsaRepoProvider/build/*.cs3 "$RUNNER_TEMP/cloudstream-builds/"
+
+      - name: Publish builds branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd "$RUNNER_TEMP/cloudstream-builds"
+          git init
+          git checkout -b builds
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Build ${GITHUB_SHA}"
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin builds
