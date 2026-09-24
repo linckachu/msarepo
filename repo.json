@@ -1,0 +1,8 @@
+{
+  "name": "MSA Repo",
+  "description": "CloudStream için MSA film ve dizi deposu",
+  "manifestVersion": 1,
+  "pluginLists": [
+    "https://raw.githubusercontent.com/linkachu/msarepo/builds/plugins.json"
+  ]
+}
